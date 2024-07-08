@@ -1,0 +1,155 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+/* import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom';
+
+export default function EditInventorydetails() {
+let navigate=useNavigate();
+const{id}= useParams();
+    const [inventorydetails, setInventorydetails] = useState(
+        {
+            pincode:"",
+            statename:"",
+            countryname:"",
+            city:"",
+            nearbyloction:"",
+            phonenumber:"",
+            email:""
+        }
+    )
+    const{pincode,statename,countryname,city,nearbyloction,phonenumber,email}=inventorydetails;
+    const onInputChange=(e)=>
+    {
+       setInventorydetails({...inventorydetails,[e.target.name]:e.target.value});
+    };
+
+    useEffect(()=>{
+        loadInventory();
+    },[]);
+
+    const onSubmit= async (e)=>{
+        e.preventDefault();
+        await axios.put(`http://localhost:8080/student/update${id}`,inventorydetails)
+        navigate("/");
+
+
+    }
+    const loadInventory= async()=>{
+        const result= await axios.get(`http://localhost:8080/student/${id}`);
+        setInventorydetails(result.data);
+
+    }
+
+  return (
+    <div className='container'>
+      <div className='row' style={{textAlign:"center"}}>
+        <div className=" col-md-6 offset-md-3 border rounded p-4 mt-2 shadow">
+            <h2 className="text-center m-4">
+                Edit vehicle
+            </h2>
+            <form onSubmit={(e)=>onSubmit(e)}>
+            <div className="mb-3">
+                <label htmlFor='Rollno' className='form-label'>
+                    
+                </label>
+                <input type='text'
+                className='form-control'
+            placeholder='Enter Your rollno'
+        name="rollno"
+        value={rollno}
+        onChange={(e)=>onInputChange(e)}
+        />
+            </div>
+             <div className="mb-3">
+                <label htmlFor="Named" className="form-label">
+                    
+                </label>
+                <input type='text'
+                className="form-control"
+            placeholder="Enter Your Name"
+        name="username"
+        value={username}
+        onChange={(e)=>onInputChange(e)}
+        />
+            </div> 
+
+            <div className="mb-3">
+                <label htmlFor="Emailaddr" className="form-label">
+                    
+                </label>
+                <input type='text'
+                className="form-control"
+            placeholder="Enter your Email address"
+        name="emailaddr"
+        value={emailaddr}
+        onChange={(e)=>onInputChange(e)}
+        />
+            </div>
+            <div className="mb-3">
+                <label htmlFor="Isactive"className="form-label">
+                    
+                    
+                </label>
+                <input type='text'
+                className="form-control"
+            placeholder="Isactive"
+        name="isactive"
+        value={isactive}
+        onChange={(e)=>onInputChange(e)}
+        />
+            </div>
+            <button type='submit' className='btn btn-outline-primary'>Submit</button>
+            <Link  className='btn btn-outline-danger mx-2' to="/">Cancel</Link>
+            </form>
+        </div>
+      </div>
+    </div>
+  )
+} */
