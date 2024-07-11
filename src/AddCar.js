@@ -72,7 +72,7 @@ export default function AddCar() {
 
         delete errors.color;
       } else if (name === "milage") {
-        if (!/^[0-9_]+$/.test(value)) {
+        if (!/^[0-9]+$/.test(value)) {
           error = "Milage Can not Contain special Character";
         }
 
