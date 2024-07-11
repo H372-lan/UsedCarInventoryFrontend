@@ -89,7 +89,7 @@ export default function AddCar() {
         delete errors.model;
       }
       else if (name === "model") {
-        if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+        if (!/^[a-zA-Z0-9 -]+$/.test(value)) {
           error = "Model Can not Contain special Character";
         }
 

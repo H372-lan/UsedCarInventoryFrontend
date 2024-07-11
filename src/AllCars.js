@@ -96,9 +96,9 @@ export default function AllCars() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selctedFilters, SetSelectedFilters] = useState({
-    typeofcar: "",
-    make: "",
-    color: "",
+    typeOfCar: [],
+    make: [],
+    color: [],
   });
   const [activateFilters, setActivateFilters] = useState([]);
   const [alertmessage, setAlertmessage] = useState(null);
@@ -123,33 +123,45 @@ export default function AllCars() {
       (item.saleNo.toString() && item.saleNo.toString().includes(searchTerm));
 
     const matchesFilters =
-      (selctedFilters.typeofcar
-        ? item.typeOfCar === selctedFilters.typeOfCar
-        : true) &&
-      (selctedFilters.color ? item.color === selctedFilters.color : true) &&
-      (selctedFilters.make ? item.make === selctedFilters.make : true);
+      (selctedFilters.typeOfCar.length===0
+        ||  selctedFilters.typeOfCar.includes(item.typeOfCar)
+        ) &&
+      (selctedFilters.color.length===0 || selctedFilters.color.includes(item.color)) &&
+      (selctedFilters.make.length===0 || selctedFilters.make.includes(item.make));
     return matchesSearch && matchesFilters;
   });
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
     setPage(0);
   };
+  // const handleFilterChange = (type, value) => {
+  //   SetSelectedFilters((prev) => ({ ...prev, [type]: value }));
+  //   setActivateFilters((prev) => [...prev, { type, value }]);
+  //   setPage(0);
+  // };
   const handleFilterChange = (type, value) => {
-    SetSelectedFilters((prev) => ({ ...prev, [type]: value }));
-    setActivateFilters((prev) => [...prev, { type, value }]);
-    setPage(0);
-  };
+      SetSelectedFilters((prev) => {
+        const newValues=prev[type].includes(value)?prev[type].filter((v)=>v !== value):
+        [...prev[type], value];
+      return{...prev,[type]:newValues} });
+      setActivateFilters((prev) => {
+        const newFilters=prev.some((filter)=>filter.type===type && filter.value===value)?prev.filter((filter)=>!(filter.type===type &&filter.value=== value))
+      :[...prev,{type,value}] ;
+    return newFilters;});
+      setPage(0);
+    };
+
   const handleToggleDrawer = (event) => {
     setDrawerOpen(!drawerOpen);
   };
   const handleResetFilters = () => {
-    SetSelectedFilters({ typeOfCar: "", color: "", make: "" });
+    SetSelectedFilters({ typeOfCar: [], color: [], make: [] });
     setActivateFilters([]);
   };
   const handleRemoveFilters = (type, value) => {
-    SetSelectedFilters((prev) => ({ ...prev, [type]: "" }));
+    SetSelectedFilters((prev) => ({ ...prev, [type]: prev[type].filter((v)=>v !==value), }));
     setActivateFilters((prev) =>
-      prev.filter((filter) => filter.type !== type || filter.value !== value)
+      prev.filter((filter) => !(filter.type === type && filter.value === value))
     );
   };
 
@@ -260,7 +272,7 @@ export default function AllCars() {
                       borderBlockColor: "#A8A6A6",
                       color: "#000000",
                     }}
-                    onClick={() => handleFilterChange("typeofcar", typeOfCar)}
+                    onClick={() => handleFilterChange("typeOfCar", typeOfCar)}
                   >
                     {typeOfCar}
                   </Button>
@@ -290,7 +302,7 @@ export default function AllCars() {
                   Make
                 </Typography>
 
-                {uniqueMakes.map((makes) => (
+                {uniqueMakes.map((make) => (
                   <Button
                     variant="outlined"
                     sx={{
@@ -299,9 +311,9 @@ export default function AllCars() {
                       borderBlockColor: "#A8A6A6",
                       color: "#000000",
                     }}
-                    onClick={() => handleFilterChange("makes", makes)}
+                    onClick={() => handleFilterChange("make", make)}
                   >
-                    {makes}
+                    {make}
                   </Button>
                 ))}
               </Grid>
