@@ -10,19 +10,75 @@ export default function AddCity() {
   const [alertmessage, setAlertmessage] = useState(null);
   const [cityadd, setCityadd] = useState({
     pincode: "",
-    cityname: "",
-    statename: "",
+    cityName: "",
+    stateName: "",
+    country: "",
+  });
+  const [errors, setErrors] = useState({
+    pincode: "",
+    cityName: "",
+    stateName: "",
     country: "",
   });
 
-  const { pincode, cityname, statename, country } = cityadd;
+  const { pincode, cityName, stateName, country } = cityadd;
   const onInputChange = (e) => {
-    setCityadd({ ...cityadd, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setCityadd({ ...cityadd, [name]: value });
+  };
+  const onBlur = (e) => {
+    const { name, value } = e.target;
+    const error = validateField(name, value);
+    setErrors({ ...errors, [name]: error });
+  };
+  const validateField = (name, value) => {
+    let error = "";
+    if (!value) {
+      error = "This Field is Required";
+    } else {
+      if (name === "pincode") {
+        if (!/^\d{6}$/.test(value)) {
+          error = "Pincode must contain 6 digit";
+        }
+
+        delete errors.pincode;
+      } else if (name === "cityName") {
+        if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+          error = "CityName Can not Contain special Character";
+        }
+
+        delete errors.cityName;
+      } else if (name === "stateName") {
+        if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+          error = "StateName Can not Contain special Character";
+        }
+
+        delete errors.stateName;
+      } else if (name === "country") {
+        if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+          error = "Country Can not Contain special Character";
+        }
+
+        delete errors.country;
+      }
+    }
+    return error;
   };
 
   const onSubmit = async (e) => {
+    e.preventDefault();
+    let validationErrors = {};
+    Object.keys(cityadd).forEach((key) => {
+      const error = validateField(key, cityadd[key]);
+      if (error) {
+        validationErrors[key] = "This fiels is required";
+      }
+    });
+    setErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
     try {
-      e.preventDefault();
       const response = await axios.post(
         "http://localhost:8080/addcity",
         cityadd
@@ -37,6 +93,13 @@ export default function AddCity() {
           window.location.reload();
           setAlertmessage(null);
         }, 1000);
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          pincode: "",
+          stateName: "",
+          country: "",
+          cityName: "",
+        }));
       } else if (data.includes("Already Present")) {
         setAlertmessage({
           type: "danger",
@@ -46,6 +109,13 @@ export default function AddCity() {
           window.location.reload();
           setAlertmessage(null);
         }, 1000);
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          pincode: "",
+          stateName: "",
+          country: "",
+          cityName: "",
+        }));
       } else {
         const space = data.split(":");
         const data1 = space[0];
@@ -89,47 +159,87 @@ export default function AddCity() {
         <div className=" col-md-6 offset-md-3 border rounded p-4 mt-2 shadow">
           <h2 className="text-center m-2">Add City</h2>
           <form onSubmit={(e) => onSubmit(e)}>
-            <div className="mb-2">
+            <div className="my-4">
               <input
                 type="text"
-                className="form-control my-4"
+                className="form-control my-2"
                 placeholder="Enter Pincode"
                 name="pincode"
                 value={pincode}
                 pattern="[0-9]{6}"
                 maxlength="6"
                 onChange={(e) => onInputChange(e)}
+                onBlur={onBlur}
               />
+              {errors.pincode && (
+                <div
+                  className="position-absolute text-danger"
+                  style={{ fontSize: "10px", textAlign: "left" }}
+                >
+                  <i class="bi bi-exclamation-circle-fill mx-2"></i>
+                  {errors.pincode}
+                </div>
+              )}
             </div>
-            <div className="mb-2">
+            <div className="my-4">
               <input
                 type="tel"
-                className="form-control my-4"
+                className="form-control my-2"
                 placeholder="Enter country"
                 name="country"
                 value={country}
                 onChange={(e) => onInputChange(e)}
+                onBlur={onBlur}
               />
+              {errors.country && (
+                <div
+                  className="position-absolute text-danger"
+                  style={{ fontSize: "10px", textAlign: "left" }}
+                >
+                  <i class="bi bi-exclamation-circle-fill mx-2"></i>
+                  {errors.country}
+                </div>
+              )}
             </div>
-            <div className="mb-2">
+            <div className="my-4">
               <input
                 type="text"
-                className="form-control my-4"
+                className="form-control my-2"
                 placeholder="Enter Statename"
-                name="statename"
-                value={statename}
+                name="stateName"
+                value={stateName}
                 onChange={(e) => onInputChange(e)}
+                onBlur={onBlur}
               />
+              {errors.stateName && (
+                <div
+                  className="position-absolute text-danger"
+                  style={{ fontSize: "10px", textAlign: "left" }}
+                >
+                  <i class="bi bi-exclamation-circle-fill mx-2"></i>
+                  {errors.stateName}
+                </div>
+              )}
             </div>
-            <div className="mb-2">
+            <div className="my-4">
               <input
                 type="text"
-                className="form-control my-4"
+                className="form-control my-2"
                 placeholder="Enter Cityname"
-                name="cityname"
-                value={cityname}
+                name="cityName"
+                value={cityName}
                 onChange={(e) => onInputChange(e)}
+                onBlur={onBlur}
               />
+              {errors.cityName && (
+                <div
+                  className="position-absolute text-danger"
+                  style={{ fontSize: "10px", textAlign: "left" }}
+                >
+                  <i class="bi bi-exclamation-circle-fill mx-2"></i>
+                  {errors.cityName}
+                </div>
+              )}
             </div>
             <button type="submit" className="btn btn-outline-success my-3">
               Add

@@ -104,8 +104,9 @@ export default function AllCity() {
   const filteredCityDetails = citydetails.filter((item) => {
     const searchTerm = search.toLowerCase();
     return (
-      (item.cityname && item.cityname.toLowerCase().includes(searchTerm)) ||
-      (item.statename && item.statename.toLowerCase().includes(searchTerm)) ||
+      (item.country && item.country.toLowerCase().includes(searchTerm)) ||
+      (item.cityName && item.cityName.toLowerCase().includes(searchTerm)) ||
+      (item.stateName && item.stateName.toLowerCase().includes(searchTerm)) ||
       (item.pincode && item.pincode.toLowerCase().includes(searchTerm))
     );
   });
@@ -125,7 +126,7 @@ export default function AllCity() {
 
   const deleteCity = async (id) => {
     const response = await axios.delete(
-      `http://localhost:8080/delete/city${id}`
+      `http://localhost:8080/delete/city/${id}`
     );
     const data = response.data;
     if (data.includes("Can not delete")) {
@@ -298,14 +299,14 @@ export default function AllCity() {
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.statename}
+                  {row.stateName}
                 </TableCell>
                 <TableCell
                   component="th"
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.cityname}
+                  {row.cityName}
                 </TableCell>
                 <TableCell
                   component="th"

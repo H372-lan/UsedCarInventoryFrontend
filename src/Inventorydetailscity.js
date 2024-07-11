@@ -101,16 +101,18 @@ export default function Inventorydetailscity() {
   const filteredInventoryDetails = inventorydetails.filter((item) => {
     const searchTerm = search.toLowerCase();
     return (
-      (item.city.cityname &&
-        item.city.cityname.toLowerCase().includes(searchTerm)) ||
-      (item.city.statename &&
-        item.city.statename.toLowerCase().includes(searchTerm)) ||
+      (item.city.country &&
+        item.city.country.toLowerCase().includes(searchTerm)) ||
+      (item.city.cityName &&
+        item.city.cityName.toLowerCase().includes(searchTerm)) ||
+      (item.city.stateName &&
+        item.city.stateName.toLowerCase().includes(searchTerm)) ||
       (item.city.pincode &&
         item.city.pincode.toLowerCase().includes(searchTerm)) ||
-      (item.nearbylocation &&
-        item.nearbylocation.toLowerCase().includes(searchTerm)) ||
-      (item.inventorynumber.toString() &&
-        item.inventorynumber.toString().includes(searchTerm))
+      (item.nearByLocation &&
+        item.nearByLocation.toLowerCase().includes(searchTerm)) ||
+      (item.inventoryNumber.toString() &&
+        item.inventoryNumber.toString().includes(searchTerm))
     );
   });
 
@@ -124,14 +126,14 @@ export default function Inventorydetailscity() {
 
   const loadInventory = async () => {
     const result = await axios.get(
-      `http://localhost:8080/allinventorydetailsofcity${id}`
+      `http://localhost:8080/allinventorydetailsofcity/${id}`
     );
     const inventorydetails = result.data;
     const updateddata = await Promise.all(
       inventorydetails.map(async (item) => {
         try {
           const carResponse = await axios.get(
-            `http://localhost:8080/allcardetailswithuniquecode${item.inventorynumber}`
+            `http://localhost:8080/allcardetailswithuniquecode/${item.inventorynumber}`
           );
           return { ...item, carCount: carResponse.data.length };
         } catch (carError) {
@@ -145,7 +147,7 @@ export default function Inventorydetailscity() {
 
   const deleteVehicle = async (id) => {
     const response = await axios.delete(
-      `http://localhost:8080/delete/inventory${id}`
+      `http://localhost:8080/delete/inventory/${id}`
     );
     const data = response.data;
     if (data.includes("Can not delete")) {
@@ -307,7 +309,7 @@ export default function Inventorydetailscity() {
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.inventorynumber}
+                  {row.inventoryNumber}
                 </TableCell>
                 <TableCell
                   component="th"
@@ -328,28 +330,28 @@ export default function Inventorydetailscity() {
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.city.statename}
+                  {row.city.stateName}
                 </TableCell>
                 <TableCell
                   component="th"
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.city.cityname}
+                  {row.city.cityName}
                 </TableCell>
                 <TableCell
                   component="th"
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.nearbylocation}
+                  {row.nearByLocation}
                 </TableCell>
                 <TableCell
                   component="th"
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.phonenumber}
+                  {row.phoneNumber}
                 </TableCell>
                 <TableCell
                   component="th"
@@ -363,7 +365,7 @@ export default function Inventorydetailscity() {
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  <Link to={`/cardetailsbyinventory/${row.inventorynumber}`}>
+                  <Link to={`/cardetailsbyinventory/${row.inventoryNumber}`}>
                     <i class="bi bi-chevron-right"></i>
                   </Link>
                 </TableCell>
@@ -374,14 +376,14 @@ export default function Inventorydetailscity() {
                   style={{ textAlign: "center" }}
                 >
                   <Link
-                    to={`/editinventory/${row.inventorynumber}/${row.city.pincode}`}
+                    to={`/editinventory/${row.inventoryNumber}/${row.city.pincode}`}
                   >
                     <i class="bi bi-pencil-square mx-4"></i>
                   </Link>
                   <i
                     class="bi bi-trash"
                     style={{ color: "red" }}
-                    onClick={() => deleteVehicle(row.inventorynumber)}
+                    onClick={() => deleteVehicle(row.inventoryNumber)}
                   ></i>
                 </TableCell>
                 <TableCell
@@ -390,7 +392,7 @@ export default function Inventorydetailscity() {
                   style={{ textAlign: "center" }}
                 >
                   <Link
-                    to={`/addcar/${row.inventorynumber}/${row.city.pincode}`}
+                    to={`/addcar/${row.inventoryNumber}/${row.city.pincode}`}
                   >
                     <i
                       class="bi bi-plus-circle"

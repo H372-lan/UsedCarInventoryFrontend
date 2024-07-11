@@ -10,36 +10,89 @@ export default function AddInventory() {
   const [alertmessage, setAlertmessage] = useState(null);
   const [inventoryadd, setInventoryadd] = useState({
     pincode: "",
-    nearbylocation: "",
-    phonenumber: "",
+    nearByLocation: "",
+    phoneNumber: "",
     email: "",
   });
   const [location, setLocation] = useState({
-    cityname: "",
-    statename: "",
+    cityName: "",
+    stateName: "",
     country: "",
+  });
+  const [errors, setErrors] = useState({
+    cityName: "",
+    stateName: "",
+    country: "",
+    pincode: "",
+    nearByLocation: "",
+    phoneNumber: "",
+    email: "",
   });
   const [pincodes, setPincodes] = useState([]);
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
-  const { pincode, nearbylocation, phonenumber, email } = inventoryadd;
-  const { cityname, statename, country } = location;
+  const { pincode, nearByLocation, phoneNumber, email } = inventoryadd;
+  const { cityName, stateName, country } = location;
   const onInputChange = (e) => {
-    setInventoryadd({ ...inventoryadd, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setInventoryadd({ ...inventoryadd, [name]: value });
+  };
+  const onBlur = (e) => {
+    const { name, value } = e.target;
+    const error = validateField(name, value);
+    setErrors({ ...errors, [name]: error });
+  };
+  const validateField = (name, value) => {
+    let error = "";
+    if (!value) {
+      error = "This Field is Required";
+    } else {
+      if (name === "nearByLocation") {
+        if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+          error = "This Field Can not contain special character";
+        }
+
+        delete errors.nearByLocation;
+      } else if (name === "phoneNumber") {
+        if (!/^[0-9]{10}$/.test(value)) {
+          error = "PhoneNumber must contain 10 digits";
+        }
+
+        delete errors.phoneNumber;
+      } else if (name === "email") {
+        if (!/^[a-z0-9.%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(value)) {
+          error = "EmailId is Not Valid";
+        }
+
+        delete errors.email;
+      }
+    }
+    return error;
   };
   const onLocationChange = (e) => {
-    setLocation({ ...location, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setLocation({ ...location, [name]: value });
   };
   useEffect(() => {
     fetchallcountriesdata();
     fetchstatefromcountry();
     fetchcityfromstate();
     fetchpincodesfromcities();
-  }, [country, statename, cityname]);
+  }, [country, stateName, cityName]);
   const onSubmit = async (e) => {
+    e.preventDefault();
+    let validationErrors = {};
+    Object.keys(inventoryadd).forEach((key) => {
+      if (!inventoryadd[key]) {
+        validationErrors[key] = "This fiels is required";
+      }
+    });
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
     try {
-      e.preventDefault();
       const response = await axios.post(
         "http://localhost:8080/addinventory",
         inventoryadd
@@ -71,7 +124,7 @@ export default function AddInventory() {
   const fetchallcountriesdata = async () => {
     try {
       const response = await axios.get("http://localhost:8080/allcountries");
-      setCountries(response.data);
+      setCountries(response.data.sort());
     } catch (error) {
       console.error("error data", error);
     }
@@ -80,9 +133,9 @@ export default function AddInventory() {
   const fetchstatefromcountry = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/allstatesfromcountry${country}`
+        `http://localhost:8080/allstatesfromcountry/${country}`
       );
-      setStates(response.data);
+      setStates(response.data.sort());
     } catch (error) {
       console.error("error data", error);
     }
@@ -91,9 +144,9 @@ export default function AddInventory() {
   const fetchcityfromstate = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/allcitiesfromstate${statename}/${country}`
+        `http://localhost:8080/allcitiesfromstate/${stateName}/${country}`
       );
-      setCities(response.data);
+      setCities(response.data.sort());
     } catch (error) {
       console.error("error data", error);
     }
@@ -101,9 +154,9 @@ export default function AddInventory() {
   const fetchpincodesfromcities = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/allpincodefromcity${cityname}/${statename}`
+        `http://localhost:8080/allpincodefromcity/${cityName}/${stateName}`
       );
-      setPincodes(response.data);
+      setPincodes(response.data.sort());
     } catch (error) {
       console.error("error data", error);
     }
@@ -136,14 +189,14 @@ export default function AddInventory() {
           <h2 className="text-center m-2">Add Inventory </h2>
 
           <form onSubmit={(e) => onSubmit(e)}>
-            <div className="mb-1">
-              
+            <div className="my-4">
               <select
-                className="form-select my-4"
+                className="form-select my-1"
                 aria-label="Default select example"
                 name="country"
                 value={country}
                 onChange={(e) => onLocationChange(e)}
+                onBlur={onBlur}
                 required
               >
                 <option selected value={""}>
@@ -156,18 +209,26 @@ export default function AddInventory() {
                   </option>
                 ))}
               </select>
+              {errors.country && (
+                <div
+                  className="position-absolute text-danger"
+                  style={{ fontSize: "10px", textAlign: "left" }}
+                >
+                  <i class="bi bi-exclamation-circle-fill mx-2"></i>
+                  {errors.country}
+                </div>
+              )}
             </div>
-            <div className="mb-1">
-             
-
+            <div className="my-4">
               <select
-                className="form-select my-4"
+                className="form-select my-1"
                 aria-label="Default select example"
-                name="statename"
-                value={statename}
+                name="stateName"
+                value={stateName}
                 onChange={(e) => onLocationChange(e)}
                 required
                 disabled={!country}
+                onBlur={onBlur}
               >
                 <option selected value={""}>
                   {" "}
@@ -179,19 +240,27 @@ export default function AddInventory() {
                   </option>
                 ))}
               </select>
+              {errors.stateName && (
+                <div
+                  className="position-absolute text-danger"
+                  style={{ fontSize: "10px", textAlign: "left" }}
+                >
+                  <i class="bi bi-exclamation-circle-fill mx-2"></i>
+                  {errors.stateName}
+                </div>
+              )}
             </div>
 
-            <div className="mb-1">
-              
-
+            <div className="my-4">
               <select
-                className="form-select my-4"
+                className="form-select my-1"
                 aria-label="Default select example"
-                name="cityname"
-                value={cityname}
+                name="cityName"
+                value={cityName}
                 onChange={(e) => onLocationChange(e)}
                 required
-                disabled={!statename}
+                disabled={!stateName}
+                onBlur={onBlur}
               >
                 <option selected value={""}>
                   {" "}
@@ -203,18 +272,26 @@ export default function AddInventory() {
                   </option>
                 ))}
               </select>
+              {errors.cityName && (
+                <div
+                  className="position-absolute text-danger"
+                  style={{ fontSize: "10px", textAlign: "left" }}
+                >
+                  <i class="bi bi-exclamation-circle-fill mx-2"></i>
+                  {errors.cityName}
+                </div>
+              )}
             </div>
-            <div className="mb-1">
-              
-
+            <div className="my-4">
               <select
-                className="form-select my-4"
+                className="form-select my-1"
                 aria-label="Default select example"
                 name="pincode"
                 value={pincode}
                 onChange={(e) => onInputChange(e)}
                 required
-                disabled={!cityname}
+                onBlur={onBlur}
+                disabled={!cityName}
               >
                 <option selected value={""}>
                   {" "}
@@ -226,40 +303,77 @@ export default function AddInventory() {
                   </option>
                 ))}
               </select>
+              {errors.pincode && (
+                <div
+                  className="position-absolute text-danger"
+                  style={{ fontSize: "10px", textAlign: "left" }}
+                >
+                  <i class="bi bi-exclamation-circle-fill mx-2"></i>
+                  {errors.pincode}
+                </div>
+              )}
             </div>
-            <div className="mb-1">
-              
+            <div className="my-4">
               <input
                 type="text"
-                className="form-control my-4"
+                className="form-control my-1"
                 placeholder="Enter Near by location"
-                name="nearbylocation"
-                value={nearbylocation}
+                name="nearByLocation"
+                value={nearByLocation}
                 onChange={(e) => onInputChange(e)}
+                onBlur={onBlur}
               />
+              {errors.nearByLocation && (
+                <div
+                  className="position-absolute text-danger"
+                  style={{ fontSize: "10px", textAlign: "left" }}
+                >
+                  <i class="bi bi-exclamation-circle-fill mx-2"></i>
+                  {errors.nearByLocation}
+                </div>
+              )}
             </div>
-            <div className="mb-1">
-              
+            <div className="my-4">
               <input
                 type="tel"
-                className="form-control my-4"
+                className="form-control my-1"
                 placeholder="Enter Phone number"
-                name="phonenumber"
-                value={phonenumber}
+                name="phoneNumber"
+                value={phoneNumber}
                 pattern="[0-9]{10}"
                 maxlength="10"
                 onChange={(e) => onInputChange(e)}
+                onBlur={onBlur}
               />
+              {errors.phoneNumber && (
+                <div
+                  className="position-absolute text-danger"
+                  style={{ fontSize: "10px", textAlign: "left" }}
+                >
+                  <i class="bi bi-exclamation-circle-fill mx-2"></i>
+                  {errors.phoneNumber}
+                </div>
+              )}
             </div>
-            <div className="mb-3">
+            <div className="my-4">
               <input
                 type="email"
-                className="form-control my-4"
+                className="form-control my-1"
                 placeholder="Enter Your Email Id"
                 name="email"
                 value={email}
                 onChange={(e) => onInputChange(e)}
+                onBlur={onBlur}
               />
+              {errors.email && (
+                <div
+                  className="position-absolute text-danger"
+                  style={{ fontSize: "10px", textAlign: "left" }}
+                >
+                  <i class="bi bi-exclamation-circle-fill mx-2"></i>
+                  {errors.email}
+                </div>
+              )}
             </div>
             <button type="submit" className="btn btn-outline-success">
               Add

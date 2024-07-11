@@ -103,17 +103,16 @@ export default function AllSoldcar() {
   const filteredInventoryDetails = soldcardetails.filter((item) => {
     const searchTerm = search.toLowerCase();
     return (
-      (item.saleno.toString() &&
-        item.saleno.toString().toLowerCase().includes(searchTerm)) ||
+      (item.saleNo.toString() &&
+        item.saleNo.toString().toLowerCase().includes(searchTerm)) ||
       (item.model && item.model.toLowerCase().includes(searchTerm)) ||
-      (item.model.typeofcar &&
-        item.model.typeofcar.toLowerCase().includes(searchTerm)) ||
+      (item.typeOfCar && item.typeOfCar.toLowerCase().includes(searchTerm)) ||
       (item.color && item.color.toLowerCase().includes(searchTerm)) ||
-      (item.adharnumber &&
-        item.adharnumber.toLowerCase().includes(searchTerm)) ||
-      (item.ownername && item.ownername.toLowerCase().includes(searchTerm)) ||
+      (item.adharNumber &&
+        item.adharNumber.toLowerCase().includes(searchTerm)) ||
+      (item.ownerName && item.ownerName.toLowerCase().includes(searchTerm)) ||
       (item.email && item.email.toLowerCase().includes(searchTerm)) ||
-      (item.phonenumber && item.phonenumber.toLowerCase().includes(searchTerm))
+      (item.phoneNumber && item.phoneNumber.toLowerCase().includes(searchTerm))
     );
   });
 
@@ -130,7 +129,7 @@ export default function AllSoldcar() {
     const result = await axios.get("http://localhost:8080/allsolddetails");
     const resultdata = result.data;
     const sortedData = resultdata.sort(
-      (a, b) => new Date(b.sellingdate) - new Date(a.sellingdate)
+      (a, b) => new Date(b.sellingDate) - new Date(a.sellingDate)
     );
     setSoldcardetails(sortedData);
   };
@@ -243,14 +242,14 @@ export default function AllSoldcar() {
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.saleno}
+                  {row.saleNo}
                 </TableCell>
                 <TableCell
                   component="th"
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.inventorynumber}
+                  {row.inventoryNumber}
                 </TableCell>
                 <TableCell
                   component="th"
@@ -264,7 +263,7 @@ export default function AllSoldcar() {
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.typeofcar}
+                  {row.typeOfCar}
                 </TableCell>
                 <TableCell
                   component="th"
@@ -278,14 +277,14 @@ export default function AllSoldcar() {
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.adharnumber}
+                  {row.adharNumber}
                 </TableCell>
                 <TableCell
                   component="th"
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.ownername}
+                  {row.ownerName}
                 </TableCell>
                 <TableCell
                   component="th"
@@ -299,14 +298,14 @@ export default function AllSoldcar() {
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.phonenumber}
+                  {row.phoneNumber}
                 </TableCell>
                 <TableCell
                   component="th"
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.sellingdate}
+                  {row.sellingDate}
                 </TableCell>
               </TableRow>
             ))}

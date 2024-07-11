@@ -10,21 +10,29 @@ export default function AddCar() {
   const [alertmessage, setAlertmessage] = useState(null);
   const { id, pin } = useParams();
   const [caradd, setCaradd] = useState({
-    inventorynumber: id,
-    kmdriven: "",
+    inventoryNumber: id,
+    kmDriven: "",
     mfd: "",
-    typeofcar: "",
+    typeOfCar: "",
     color: "",
     milage: "",
     model: "",
     pincode: pin,
   });
+  const [errors, setErrors] = useState({
+    kmDriven: "",
+    mfd: "",
+    typeOfCar: "",
+    color: "",
+    milage: "",
+    model: "",
+  });
 
   const {
-    inventorynumber,
-    kmdriven,
+    inventoryNumber,
+    kmDriven,
     mfd,
-    typeofcar,
+    typeOfCar,
     color,
     milage,
     model,
@@ -32,11 +40,66 @@ export default function AddCar() {
   } = caradd;
 
   const onInputChange = (e) => {
-    setCaradd({ ...caradd, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setCaradd({ ...caradd, [name]: value });
+  };
+  const onBlur = (e) => {
+    const { name, value } = e.target;
+    const error = validateField(name, value);
+    setErrors({ ...errors, [name]: error });
+  };
+  const validateField = (name, value) => {
+    let error = "";
+    if (!value) {
+      error = "This Field is Required";
+    } else {
+      if (name === "kmDriven") {
+        if (!/^[0-9_]+$/.test(value)) {
+          error = "KmDriven Can not conatin special character";
+        }
+
+        delete errors.typeOfCar;
+      } else if (name === "typeOfCar") {
+        if (!/^[a-zA-Z_]+$/.test(value)) {
+          error = "Type Of Car Can not Contain special Character";
+        }
+
+        delete errors.typeOfCar;
+      } else if (name === "color") {
+        if (!/^[a-zA-Z_]+$/.test(value)) {
+          error = "Color Can not Contain special Character";
+        }
+
+        delete errors.color;
+      } else if (name === "milage") {
+        if (!/^[1-9_]+$/.test(value)) {
+          error = "Milage Can not Contain special Character";
+        }
+
+        delete errors.milage;
+      } else if (name === "model") {
+        if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+          error = "Model Can not Contain special Character";
+        }
+
+        delete errors.model;
+      }
+    }
+    return error;
   };
   const onSubmit = async (e) => {
+    e.preventDefault();
+    let validationErrors = {};
+    Object.keys(caradd).forEach((key) => {
+      if (!caradd[key]) {
+        validationErrors[key] = "This fiels is required";
+      }
+    });
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
     try {
-      e.preventDefault();
       const response = await axios.post("http://localhost:8080/addcar", caradd);
       const data = response.data;
       if (data.includes("Sucessfully Car Created")) {
@@ -91,13 +154,12 @@ export default function AddCar() {
         <div className=" col-md-6 offset-md-3 border rounded p-2 mt-1 shadow">
           <h2 className="text-center m-1">Add Car</h2>
           <form onSubmit={(e) => onSubmit(e)}>
-            <div className="mb-1">
-              
+            <div className="my-4">
               <input
                 type="text"
-                className="form-control my-4"
-                name="inventorynumber"
-                value={inventorynumber}
+                className="form-control my-1"
+                name="inventoryNumber"
+                value={inventoryNumber}
                 onChange={(e) => onInputChange(e)}
                 style={{
                   backgroundColor: "#EFECEC",
@@ -107,11 +169,10 @@ export default function AddCar() {
                 readOnly
               />
             </div>
-            <div className="mb-1">
-              
+            <div className="my-4">
               <input
                 type="text"
-                className="form-control my-4"
+                className="form-control my-1"
                 name="pincode"
                 value={pincode}
                 onChange={(e) => onInputChange(e)}
@@ -123,76 +184,130 @@ export default function AddCar() {
                 readOnly
               />
             </div>
-            <div className="mb-1">
-             
+            <div className="my-4">
               <input
                 type="text"
-                className="form-control my-4"
+                className="form-control my-1"
                 placeholder="Enter KM driven"
-                name="kmdriven"
-                value={kmdriven}
+                name="kmDriven"
+                value={kmDriven}
                 pattern="\d{1,6}"
                 maxlength="6"
                 onChange={(e) => onInputChange(e)}
+                onBlur={onBlur}
               />
+              {errors.kmDriven && (
+                <div
+                  className="position-absolute text-danger"
+                  style={{ fontSize: "10px", textAlign: "left" }}
+                >
+                  <i class="bi bi-exclamation-circle-fill mx-2"></i>
+                  {errors.kmDriven}
+                </div>
+              )}
             </div>
-            <div className="mb-1">
-              
+            <div className="my-4">
               <input
                 type="date"
-                className="form-control my-4"
+                className="form-control my-1"
                 placeholder="Enter MFD date In(yyyy-mm-dd)"
                 name="mfd"
                 value={mfd}
                 onChange={(e) => onInputChange(e)}
+                onBlur={onBlur}
               />
+              {errors.mfd && (
+                <div
+                  className="position-absolute text-danger"
+                  style={{ fontSize: "10px", textAlign: "left" }}
+                >
+                  <i class="bi bi-exclamation-circle-fill mx-2"></i>
+                  {errors.mfd}
+                </div>
+              )}
             </div>
-            <div className="mb-1">
-              
+            <div className="my-4">
               <input
                 type="text"
-                className="form-control my-4"
+                className="form-control my-1"
                 placeholder="Enter type of Car"
-                name="typeofcar"
-                value={typeofcar}
+                name="typeOfCar"
+                value={typeOfCar}
                 onChange={(e) => onInputChange(e)}
+                onBlur={onBlur}
               />
+              {errors.typeOfCar && (
+                <div
+                  className="position-absolute text-danger"
+                  style={{ fontSize: "10px", textAlign: "left" }}
+                >
+                  <i class="bi bi-exclamation-circle-fill mx-2"></i>
+                  {errors.typeOfCar}
+                </div>
+              )}
             </div>
-            <div className="mb-1">
-              
+            <div className="my-4">
               <input
                 type="text"
-                className="form-control my-4"
+                className="form-control my-1"
                 placeholder="Enter Color Of car"
                 name="color"
                 value={color}
                 onChange={(e) => onInputChange(e)}
+                onBlur={onBlur}
               />
+              {errors.color && (
+                <div
+                  className="position-absolute text-danger"
+                  style={{ fontSize: "10px", textAlign: "left" }}
+                >
+                  <i class="bi bi-exclamation-circle-fill mx-2"></i>
+                  {errors.color}
+                </div>
+              )}
             </div>
-            <div className="mb-1">
-              
+            <div className="my-4">
               <input
                 type="text"
-                className="form-control my-4"
+                className="form-control my-1"
                 placeholder="Enter Your Car Milage"
                 name="milage"
                 value={milage}
                 pattern="\d{1,3}"
                 maxlength="3"
                 onChange={(e) => onInputChange(e)}
+                onBlur={onBlur}
               />
+              {errors.milage && (
+                <div
+                  className="position-absolute text-danger"
+                  style={{ fontSize: "10px", textAlign: "left" }}
+                >
+                  <i class="bi bi-exclamation-circle-fill mx-2"></i>
+                  {errors.milage}
+                </div>
+              )}
             </div>
 
             <div className="mb-3">
-              
               <input
                 type="text"
-                className="form-control my-4"
+                className="form-control my-1"
                 placeholder="Enter Model Name"
                 name="model"
                 value={model}
                 onChange={(e) => onInputChange(e)}
+                onBlur={onBlur}
               />
+              {errors.model && (
+                <div
+                  className="position-absolute text-danger"
+                  style={{ fontSize: "10px", textAlign: "left" }}
+                >
+                  <i class="bi bi-exclamation-circle-fill mx-2"></i>
+                  {errors.model}
+                </div>
+              )}
             </div>
             <button type="submit" className="btn btn-outline-success">
               Add

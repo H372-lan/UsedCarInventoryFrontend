@@ -103,11 +103,11 @@ export default function CardetailsInventory() {
   const filteredInventoryDetails = inventorydetails.filter((item) => {
     const searchTerm = search.toLowerCase();
     return (
-      (item.typeofcar && item.typeofcar.toLowerCase().includes(searchTerm)) ||
+      (item.typeOfCar && item.typeOfCar.toLowerCase().includes(searchTerm)) ||
       (item.color && item.color.toLowerCase().includes(searchTerm)) ||
       (item.pincode && item.pincode.toLowerCase().includes(searchTerm)) ||
       (item.model && item.model.toLowerCase().includes(searchTerm)) ||
-      (item.saleno.toString() && item.saleno.toString().includes(searchTerm))
+      (item.saleNo.toString() && item.saleNo.toString().includes(searchTerm))
     );
   });
   const handleSearchChange = (event) => {
@@ -121,14 +121,14 @@ export default function CardetailsInventory() {
 
   const loadCar = async () => {
     const result = await axios.get(
-      `http://localhost:8080/allcardetailswithuniquecode${id}`
+      `http://localhost:8080/allcardetailswithuniquecode/${id}`
     );
     setInventorydetails(result.data);
   };
 
   const deleteCar = async (id) => {
     const response = await axios.delete(
-      `http://localhost:8080/delete/car${id}`
+      `http://localhost:8080/delete/car/${id}`
     );
     const data = response.data;
     if (data.includes("Successfully Deleted")) {
@@ -284,21 +284,21 @@ export default function CardetailsInventory() {
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.saleno}
+                  {row.saleNo}
                 </TableCell>
                 <TableCell
                   component="th"
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.inventorynumber}
+                  {row.inventoryNumber}
                 </TableCell>
                 <TableCell
                   component="th"
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.kmdriven}
+                  {row.kmDriven}
                 </TableCell>
                 <TableCell
                   component="th"
@@ -312,7 +312,7 @@ export default function CardetailsInventory() {
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.typeofcar}
+                  {row.typeOfCar}
                 </TableCell>
                 <TableCell
                   component="th"
@@ -347,14 +347,14 @@ export default function CardetailsInventory() {
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  <Link to={`/editcar/${row.saleno}`}>
+                  <Link to={`/editcar/${row.saleNo}`}>
                     <i class="bi bi-pencil-square mx-4"></i>
                   </Link>
                   <Link>
                     <i
                       class="bi bi-trash"
                       style={{ color: "red" }}
-                      onClick={() => deleteCar(row.saleno)}
+                      onClick={() => deleteCar(row.saleNo)}
                     ></i>
                   </Link>
                 </TableCell>
@@ -364,7 +364,7 @@ export default function CardetailsInventory() {
                   style={{ textAlign: "center" }}
                 >
                   <Link
-                    to={`/soldcar/${row.saleno}/${row.inventorynumber}/${row.model}/${row.typeofcar}/${row.color}`}
+                    to={`/soldcar/${row.saleNo}/${row.inventoryNumber}/${row.model}/${row.typeOfCar}/${row.color}`}
                   >
                     <button type="button" class="btn btn-success">
                       Sell

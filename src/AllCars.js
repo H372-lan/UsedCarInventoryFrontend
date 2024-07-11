@@ -113,17 +113,17 @@ export default function AllCars() {
   const filteredCarDetails = cardetails.filter((item) => {
     const searchTerm = search.toLowerCase();
     const matchesSearch =
-      (item.typeofcar && item.typeofcar.toLowerCase().includes(searchTerm)) ||
+      (item.typeOfCar && item.typeOfCar.toLowerCase().includes(searchTerm)) ||
       (item.color && item.color.toLowerCase().includes(searchTerm)) ||
       (item.pincode && item.pincode.toLowerCase().includes(searchTerm)) ||
       (item.model && item.model.toLowerCase().includes(searchTerm)) ||
-      (item.inventorynumber.toString() &&
-        item.inventorynumber.toString().includes(searchTerm)) ||
-      (item.saleno.toString() && item.saleno.toString().includes(searchTerm));
+      (item.inventoryNumber.toString() &&
+        item.inventoryNumber.toString().includes(searchTerm)) ||
+      (item.saleNo.toString() && item.saleNo.toString().includes(searchTerm));
 
     const matchesFilters =
       (selctedFilters.typeofcar
-        ? item.typeofcar === selctedFilters.typeofcar
+        ? item.typeOfCar === selctedFilters.typeOfCar
         : true) &&
       (selctedFilters.color ? item.color === selctedFilters.color : true) &&
       (selctedFilters.model ? item.model === selctedFilters.model : true);
@@ -142,7 +142,7 @@ export default function AllCars() {
     setDrawerOpen(!drawerOpen);
   };
   const handleResetFilters = () => {
-    SetSelectedFilters({ typeofcar: "", color: "", model: "" });
+    SetSelectedFilters({ typeOfCar: "", color: "", model: "" });
     setActivateFilters([]);
   };
   const handleRemoveFilters = (type, value) => {
@@ -159,12 +159,12 @@ export default function AllCars() {
   const loadCars = async () => {
     const result = await axios.get("http://localhost:8080/readall/cars");
     const resultsdata = result.data;
-    const sortedData = resultsdata.sort((a, b) => a.kmdriven - b.kmdriven);
+    const sortedData = resultsdata.sort((a, b) => a.kmDriven - b.kmDriven);
     setCardetails(sortedData);
   };
 
   const deleteCar = async (id) => {
-    await axios.delete(`http://localhost:8080/delete/car${id}`);
+    await axios.delete(`http://localhost:8080/delete/car/${id}`);
     setAlertmessage({ type: "success", text: "Deleted Successfully" });
     setTimeout(() => {
       setAlertmessage(null);
@@ -200,7 +200,7 @@ export default function AllCars() {
     );
   }
 
-  const uniqueTypes = [...new Set(cardetails.map((item) => item.typeofcar))];
+  const uniqueTypes = [...new Set(cardetails.map((item) => item.typeOfCar))];
   const uniqueColors = [...new Set(cardetails.map((item) => item.color))];
   const uniqueModels = [...new Set(cardetails.map((item) => item.model))];
   return (
@@ -250,7 +250,7 @@ export default function AllCars() {
                 <Typography variant="subtitle1" className="fw-bold mb-3 my-2">
                   Type
                 </Typography>
-                {uniqueTypes.map((typeofcar) => (
+                {uniqueTypes.map((typeOfCar) => (
                   <Button
                     variant="outlined"
                     sx={{
@@ -259,9 +259,9 @@ export default function AllCars() {
                       borderBlockColor: "#A8A6A6",
                       color: "#000000",
                     }}
-                    onClick={() => handleFilterChange("typeofcar", typeofcar)}
+                    onClick={() => handleFilterChange("typeofcar", typeOfCar)}
                   >
-                    {typeofcar}
+                    {typeOfCar}
                   </Button>
                 ))}
               </Grid>
@@ -404,21 +404,21 @@ export default function AllCars() {
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.saleno}
+                  {row.saleNo}
                 </TableCell>
                 <TableCell
                   component="th"
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.inventorynumber}
+                  {row.inventoryNumber}
                 </TableCell>
                 <TableCell
                   component="th"
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.kmdriven}
+                  {row.kmDriven}
                 </TableCell>
                 <TableCell
                   component="th"
@@ -432,7 +432,7 @@ export default function AllCars() {
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row.typeofcar}
+                  {row.typeOfCar}
                 </TableCell>
                 <TableCell
                   component="th"
@@ -467,14 +467,14 @@ export default function AllCars() {
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  <Link to={`/editcar/${row.saleno}`}>
+                  <Link to={`/editcar/${row.saleNo}`}>
                     <i class="bi bi-pencil-square mx-4"></i>
                   </Link>
                   <Link>
                     <i
                       class="bi bi-trash"
                       style={{ color: "red" }}
-                      onClick={() => deleteCar(row.saleno)}
+                      onClick={() => deleteCar(row.saleNo)}
                     ></i>
                   </Link>
                 </TableCell>
@@ -484,7 +484,7 @@ export default function AllCars() {
                   style={{ textAlign: "center" }}
                 >
                   <Link
-                    to={`/soldcar/${row.saleno}/${row.inventorynumber}/${row.model}/${row.typeofcar}/${row.color}`}
+                    to={`/soldcar/${row.saleNo}/${row.inventoryNumber}/${row.model}/${row.typeOfCar}/${row.color}`}
                   >
                     <button type="button" class="btn btn-success">
                       Sell
