@@ -223,7 +223,7 @@ export default function TableCityDetailsInventory() {
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {row[1]}
+                  {row[0]}
                 </TableCell>
                 <TableCell
                   component="th"
