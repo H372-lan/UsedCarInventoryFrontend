@@ -43,13 +43,13 @@ export default function AddCity() {
 
         delete errors.pincode;
       } else if (name === "cityName") {
-        if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+        if (!/^[a-zA-Z0-9 ]+$/.test(value)) {
           error = "CityName Can not Contain special Character";
         }
 
         delete errors.cityName;
       } else if (name === "stateName") {
-        if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+        if (!/^[a-zA-Z0-9 ]+$/.test(value)) {
           error = "StateName Can not Contain special Character";
         }
 
