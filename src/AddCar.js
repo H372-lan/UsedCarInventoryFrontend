@@ -54,19 +54,19 @@ export default function AddCar() {
       error = "This Field is Required";
     } else {
       if (name === "kmDriven") {
-        if (!/^[0-9_]+$/.test(value)) {
+        if (!/^[0-9]+$/.test(value)) {
           error = "KmDriven Can not conatin special character";
         }
 
         delete errors.typeOfCar;
       } else if (name === "typeOfCar") {
-        if (!/^[a-zA-Z_]+$/.test(value)) {
+        if (!/^[a-zA-Z]+$/.test(value)) {
           error = "Type Of Car Can not Contain special Character";
         }
 
         delete errors.typeOfCar;
       } else if (name === "color") {
-        if (!/^[a-zA-Z_]+$/.test(value)) {
+        if (!/^[a-zA-Z]+$/.test(value)) {
           error = "Color Can not Contain special Character";
         }
 
