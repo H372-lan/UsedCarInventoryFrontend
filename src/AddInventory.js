@@ -49,7 +49,7 @@ export default function AddInventory() {
       error = "This Field is Required";
     } else {
       if (name === "nearByLocation") {
-        if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+        if (!/^[a-zA-Z0-9 ]+$/.test(value)) {
           error = "This Field Can not contain special character";
         }
 
