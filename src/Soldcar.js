@@ -7,7 +7,7 @@ export default function Soldcar() {
   const handleGoBack = () => {
     navigate(-1);
   };
-  const { id, invenno, modelofcar, type, colour } = useParams();
+  const { id, invenno, modelofcar, type, colour,maker } = useParams();
   const [alertmessage, setAlertmessage] = useState(null);
 
   const [soldcardetails, setSoldcardetails] = useState({
@@ -15,6 +15,7 @@ export default function Soldcar() {
     model: modelofcar,
     typeOfCar: type,
     color: colour,
+    make:maker,
     adharNumber: "",
     ownerName: "",
     email: "",
@@ -23,6 +24,7 @@ export default function Soldcar() {
   });
   const {
     inventoryNumber,
+    make,
     model,
     typeOfCar,
     color,
@@ -159,6 +161,23 @@ export default function Soldcar() {
                   boxShadow: "none",
                 }}
                 readOnly
+              />
+            </div>
+            <div className="my-4">
+              <input
+                type="text"
+                className="form-control my-1"
+                placeholder="Enter Model"
+                name="make"
+                value={make}
+                
+                readOnly
+                style={{
+                  backgroundColor: "#EFECEC",
+                  outline: "none",
+                  boxShadow: "none",
+                }}
+                required
               />
             </div>
             <div className="my-4">

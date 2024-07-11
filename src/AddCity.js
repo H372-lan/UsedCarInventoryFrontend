@@ -55,7 +55,7 @@ export default function AddCity() {
 
         delete errors.stateName;
       } else if (name === "country") {
-        if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+        if (!/^[a-zA-Z0-9 ]+$/.test(value)) {
           error = "Country Can not Contain special Character";
         }
 

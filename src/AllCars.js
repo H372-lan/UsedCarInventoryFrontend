@@ -97,7 +97,7 @@ export default function AllCars() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selctedFilters, SetSelectedFilters] = useState({
     typeofcar: "",
-    model: "",
+    make: "",
     color: "",
   });
   const [activateFilters, setActivateFilters] = useState([]);
@@ -117,6 +117,7 @@ export default function AllCars() {
       (item.color && item.color.toLowerCase().includes(searchTerm)) ||
       (item.pincode && item.pincode.toLowerCase().includes(searchTerm)) ||
       (item.model && item.model.toLowerCase().includes(searchTerm)) ||
+      (item.make && item.make.toLowerCase().includes(searchTerm)) ||
       (item.inventoryNumber.toString() &&
         item.inventoryNumber.toString().includes(searchTerm)) ||
       (item.saleNo.toString() && item.saleNo.toString().includes(searchTerm));
@@ -126,7 +127,7 @@ export default function AllCars() {
         ? item.typeOfCar === selctedFilters.typeOfCar
         : true) &&
       (selctedFilters.color ? item.color === selctedFilters.color : true) &&
-      (selctedFilters.model ? item.model === selctedFilters.model : true);
+      (selctedFilters.make ? item.make === selctedFilters.make : true);
     return matchesSearch && matchesFilters;
   });
   const handleSearchChange = (event) => {
@@ -142,7 +143,7 @@ export default function AllCars() {
     setDrawerOpen(!drawerOpen);
   };
   const handleResetFilters = () => {
-    SetSelectedFilters({ typeOfCar: "", color: "", model: "" });
+    SetSelectedFilters({ typeOfCar: "", color: "", make: "" });
     setActivateFilters([]);
   };
   const handleRemoveFilters = (type, value) => {
@@ -202,7 +203,7 @@ export default function AllCars() {
 
   const uniqueTypes = [...new Set(cardetails.map((item) => item.typeOfCar))];
   const uniqueColors = [...new Set(cardetails.map((item) => item.color))];
-  const uniqueModels = [...new Set(cardetails.map((item) => item.model))];
+  const uniqueMakes = [...new Set(cardetails.map((item) => item.make))];
   return (
     <>
       <div>
@@ -286,10 +287,10 @@ export default function AllCars() {
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="subtitle1" className="fw-bold mb-3 my-4">
-                  Model
+                  Make
                 </Typography>
 
-                {uniqueModels.map((model) => (
+                {uniqueMakes.map((makes) => (
                   <Button
                     variant="outlined"
                     sx={{
@@ -298,9 +299,9 @@ export default function AllCars() {
                       borderBlockColor: "#A8A6A6",
                       color: "#000000",
                     }}
-                    onClick={() => handleFilterChange("model", model)}
+                    onClick={() => handleFilterChange("makes", makes)}
                   >
-                    {model}
+                    {makes}
                   </Button>
                 ))}
               </Grid>
@@ -367,6 +368,9 @@ export default function AllCars() {
               </th>
               <th scope="row" style={{ textAlign: "center" }}>
                 Milage
+              </th>
+              <th scope="row" style={{ textAlign: "center" }}>
+                Make
               </th>
               <th scope="row" style={{ textAlign: "center" }}>
                 Model
@@ -453,6 +457,13 @@ export default function AllCars() {
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
+                  {row.make}
+                </TableCell>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  style={{ textAlign: "center" }}
+                >
                   {row.model}
                 </TableCell>
                 <TableCell
@@ -484,7 +495,7 @@ export default function AllCars() {
                   style={{ textAlign: "center" }}
                 >
                   <Link
-                    to={`/soldcar/${row.saleNo}/${row.inventoryNumber}/${row.model}/${row.typeOfCar}/${row.color}`}
+                    to={`/soldcar/${row.saleNo}/${row.inventoryNumber}/${row.model}/${row.typeOfCar}/${row.color}/${row.make}`}
                   >
                     <button type="button" class="btn btn-success">
                       Sell

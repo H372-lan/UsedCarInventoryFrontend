@@ -107,6 +107,7 @@ export default function CardetailsInventory() {
       (item.color && item.color.toLowerCase().includes(searchTerm)) ||
       (item.pincode && item.pincode.toLowerCase().includes(searchTerm)) ||
       (item.model && item.model.toLowerCase().includes(searchTerm)) ||
+      (item.make && item.make.toLowerCase().includes(searchTerm)) ||
       (item.saleNo.toString() && item.saleNo.toString().includes(searchTerm))
     );
   });
@@ -249,6 +250,9 @@ export default function CardetailsInventory() {
                 Milage
               </th>
               <th scope="row" style={{ textAlign: "center" }}>
+                Make
+              </th>
+              <th scope="row" style={{ textAlign: "center" }}>
                 Model
               </th>
               <th scope="row" style={{ textAlign: "center" }}>
@@ -333,6 +337,13 @@ export default function CardetailsInventory() {
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
+                  {row.make}
+                </TableCell>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  style={{ textAlign: "center" }}
+                >
                   {row.model}
                 </TableCell>
                 <TableCell
@@ -364,7 +375,7 @@ export default function CardetailsInventory() {
                   style={{ textAlign: "center" }}
                 >
                   <Link
-                    to={`/soldcar/${row.saleNo}/${row.inventoryNumber}/${row.model}/${row.typeOfCar}/${row.color}`}
+                    to={`/soldcar/${row.saleNo}/${row.inventoryNumber}/${row.model}/${row.typeOfCar}/${row.color}/${row.make}`}
                   >
                     <button type="button" class="btn btn-success">
                       Sell

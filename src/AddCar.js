@@ -16,6 +16,7 @@ export default function AddCar() {
     typeOfCar: "",
     color: "",
     milage: "",
+    make:"",
     model: "",
     pincode: pin,
   });
@@ -25,6 +26,7 @@ export default function AddCar() {
     typeOfCar: "",
     color: "",
     milage: "",
+    make:"",
     model: "",
   });
 
@@ -35,6 +37,7 @@ export default function AddCar() {
     typeOfCar,
     color,
     milage,
+    make,
     model,
     pincode,
   } = caradd;
@@ -77,7 +80,15 @@ export default function AddCar() {
         }
 
         delete errors.milage;
-      } else if (name === "model") {
+      } 
+      else if (name === "make") {
+        if (!/^[a-zA-Z]+$/.test(value)) {
+          error = "Make Can not Contain special Character";
+        }
+
+        delete errors.model;
+      }
+      else if (name === "model") {
         if (!/^[a-zA-Z0-9_]+$/.test(value)) {
           error = "Model Can not Contain special Character";
         }
@@ -285,6 +296,26 @@ export default function AddCar() {
                 >
                   <i class="bi bi-exclamation-circle-fill mx-2"></i>
                   {errors.milage}
+                </div>
+              )}
+            </div>
+            <div className="my-4">
+              <input
+                type="text"
+                className="form-control my-1"
+                placeholder="Enter Make Of Car"
+                name="make"
+                value={make}
+                onChange={(e) => onInputChange(e)}
+                onBlur={onBlur}
+              />
+              {errors.make && (
+                <div
+                  className="position-absolute text-danger"
+                  style={{ fontSize: "10px", textAlign: "left" }}
+                >
+                  <i class="bi bi-exclamation-circle-fill mx-2"></i>
+                  {errors.make}
                 </div>
               )}
             </div>

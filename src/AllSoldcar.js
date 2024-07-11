@@ -105,6 +105,7 @@ export default function AllSoldcar() {
     return (
       (item.saleNo.toString() &&
         item.saleNo.toString().toLowerCase().includes(searchTerm)) ||
+        (item.make && item.make.toLowerCase().includes(searchTerm)) ||
       (item.model && item.model.toLowerCase().includes(searchTerm)) ||
       (item.typeOfCar && item.typeOfCar.toLowerCase().includes(searchTerm)) ||
       (item.color && item.color.toLowerCase().includes(searchTerm)) ||
@@ -202,7 +203,10 @@ export default function AllSoldcar() {
                 Inventory Number
               </th>
               <th scope="row" style={{ textAlign: "center" }}>
-                Mopdel
+                Make
+              </th>
+              <th scope="row" style={{ textAlign: "center" }}>
+                Model
               </th>
               <th scope="row" style={{ textAlign: "center" }}>
                 Type
@@ -250,6 +254,13 @@ export default function AllSoldcar() {
                   style={{ textAlign: "center" }}
                 >
                   {row.inventoryNumber}
+                </TableCell>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  style={{ textAlign: "center" }}
+                >
+                  {row.make}
                 </TableCell>
                 <TableCell
                   component="th"

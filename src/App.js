@@ -159,7 +159,7 @@ const App = () => {
             <Route exact path="/contactus" element={<Contactus />} />
             <Route
               exact
-              path="/soldcar/:id/:invenno/:modelofcar/:type/:colour"
+              path="/soldcar/:id/:invenno/:modelofcar/:type/:colour/:maker"
               element={<Soldcar />}
             />
             <Route exact path="/allsoldcar" element={<AllSoldcar />} />
