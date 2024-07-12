@@ -134,7 +134,7 @@ export default function AllCars() {
     setSearch(event.target.value);
     setPage(0);
   };
-
+ 
   const handleFilterChange = (type, value) => {
       SetSelectedFilters((prev) => {
         const newValues=prev[type].includes(value)?prev[type].filter((v)=>v !== value):

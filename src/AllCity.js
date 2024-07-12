@@ -266,7 +266,7 @@ export default function AllCity() {
               : filteredCityDetails
             ).map((row, index) => (
               <TableRow
-                key={index + 1}
+                key={row.id}
                 style={
                   hoveredRow === index ? { backgroundColor: "#E2DEDE" } : {}
                 }
@@ -278,7 +278,7 @@ export default function AllCity() {
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {index + 1}
+                  {page*rowsPerPage + index + 1}
                 </TableCell>
                 <TableCell
                   component="th"

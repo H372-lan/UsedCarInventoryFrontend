@@ -216,7 +216,7 @@ export default function TableCityDetailsInventory() {
                   scope="row"
                   style={{ textAlign: "center" }}
                 >
-                  {index + 1}
+                   {page*rowsPerPage + index + 1}
                 </TableCell>
                 <TableCell
                   component="th"
