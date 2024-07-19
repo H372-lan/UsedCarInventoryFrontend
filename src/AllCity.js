@@ -125,6 +125,9 @@ export default function AllCity() {
   };
 
   const deleteCity = async (id) => {
+    const confirmed=window.confirm(`Are you sure you want to delete this city of pincode${id}`);
+    if(confirmed)
+      {
     const response = await axios.delete(
       `http://localhost:8080/delete/city/${id}`
     );
@@ -137,7 +140,8 @@ export default function AllCity() {
       setTimeout(() => {
         setAlertmessage(null);
       }, 2000);
-    } else {
+    } 
+    else {
       setAlertmessage({ type: "success", text: "City Deleted Successfully" });
       setTimeout(() => {
         setAlertmessage(null);
@@ -145,6 +149,8 @@ export default function AllCity() {
     }
     loadCity();
   };
+}
+
 
   const emptyRows =
     page > 0
@@ -225,7 +231,7 @@ export default function AllCity() {
             <input
               type="search"
               id="form1"
-              class="form-control m-3"
+              class="form-control my-2 m-1"
               placeholder="Search"
               onChange={(e) => {
                 handleSearchChange(e);
@@ -329,6 +335,7 @@ export default function AllCity() {
           </TableBody>
           <TableFooter style={{ position: "absolute", right: "130px" }}>
             <TableRow>
+            {filteredCityDetails.length >5 &&(
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={3}
@@ -346,7 +353,9 @@ export default function AllCity() {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
                 ActionsComponent={TablePaginationActions}
+                labelDisplayedRows={({from,to,count})=>`Page ${page+1} of ${Math.ceil(count/rowsPerPage)}`}
               />
+            )}
             </TableRow>
           </TableFooter>
         </Table>

@@ -62,7 +62,7 @@ export default function Soldcar() {
 
         
       } else if (name === "ownerName") {
-        if (!/^[a-zA-Z0-9]+$/.test(value)) {
+        if (!/^[a-zA-Z0-9 ]+$/.test(value)) {
           error = "This Field Can Not Contain Special Character";
         }
 

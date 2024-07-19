@@ -258,6 +258,7 @@ export default function TableCityDetailsInventory() {
           </TableBody>
           <TableFooter style={{ position: "absolute", right: "130px" }}>
             <TableRow>
+            {filteredData.length >5 &&(
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={3}
@@ -275,7 +276,9 @@ export default function TableCityDetailsInventory() {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
                 ActionsComponent={TablePaginationActions}
+                labelDisplayedRows={({from,to,count})=>`Page ${page+1} of ${Math.ceil(count/rowsPerPage)}`}
               />
+            )}
             </TableRow>
           </TableFooter>
         </Table>

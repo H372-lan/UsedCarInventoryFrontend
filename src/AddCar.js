@@ -9,6 +9,60 @@ export default function AddCar() {
   };
   const [alertmessage, setAlertmessage] = useState(null);
   const { id, pin } = useParams();
+  const makesOfCar = [
+    "Tata",
+    "Mini",
+    "Toyota",
+    "Audi",
+    "Honda",
+    "Maruti",
+    "Dodge",
+    "Buick",
+    "BMW",
+    "Ferrari",
+    "Ford",
+    "Aston Martin",
+    "Bentley",
+    "Bugati",
+    "Chevrolet",
+    "Citroen",
+    "Fiat",
+    "Abarth",
+    "Cadillac",
+    "Chrysler",
+    "Lamborghini",
+    "Mahindra&Mahindra",
+    "Nissan",
+    "Aixam",
+    "Alpine",
+    "Mercedes-Benz",
+  ];
+  const makesOfCarSort = makesOfCar.sort();
+  const typesOfCar = [
+    "Sedan",
+    "Minivan",
+    "Hatchback",
+    "MPV",
+    "SUV",
+    "Coupe",
+    "Convertible",
+    "Crossover",
+    "SportsCar",
+    "PickupTruck",
+  ];
+  const typesofCarSort = typesOfCar.sort();
+  const colorsOfCars = [
+    "Black",
+    "White",
+    "Blue",
+    "Violet",
+    "Red",
+    "Green",
+    "Yellow",
+    "Silver",
+    "Brown",
+    "Pink",
+  ];
   const [caradd, setCaradd] = useState({
     inventoryNumber: id,
     kmDriven: "",
@@ -16,7 +70,7 @@ export default function AddCar() {
     typeOfCar: "",
     color: "",
     milage: "",
-    make:"",
+    make: "",
     model: "",
     pincode: pin,
   });
@@ -26,7 +80,7 @@ export default function AddCar() {
     typeOfCar: "",
     color: "",
     milage: "",
-    make:"",
+    make: "",
     model: "",
   });
 
@@ -58,39 +112,37 @@ export default function AddCar() {
     } else {
       if (name === "kmDriven") {
         if (!/^[0-9]+$/.test(value)) {
-          error = "KmDriven Can not conatin special character";
+          error = "KmDriven Can not conatin special characters or Charcters";
         }
 
         delete errors.typeOfCar;
       } else if (name === "typeOfCar") {
         if (!/^[a-zA-Z]+$/.test(value)) {
-          error = "Type Of Car Can not Contain special Character";
+          error = "Type Of Car Can not Contain special Character and digits";
         }
 
         delete errors.typeOfCar;
       } else if (name === "color") {
         if (!/^[a-zA-Z]+$/.test(value)) {
-          error = "Color Can not Contain special Character";
+          error = "Color Can not Contain special Characters or digits";
         }
 
         delete errors.color;
       } else if (name === "milage") {
         if (!/^[0-9]+$/.test(value)) {
-          error = "Milage Can not Contain special Character";
+          error = "Milage Can not Contain Characters or special Characters";
         }
 
         delete errors.milage;
-      } 
-      else if (name === "make") {
+      } else if (name === "make") {
         if (!/^[a-zA-Z]+$/.test(value)) {
-          error = "Make Can not Contain special Character";
+          error = "Make Can not Contain special Character or Digits";
         }
 
         delete errors.model;
-      }
-      else if (name === "model") {
+      } else if (name === "model") {
         if (!/^[a-zA-Z0-9 -]+$/.test(value)) {
-          error = "Model Can not Contain special Character";
+          error = "Model Can not Contain special Characters";
         }
 
         delete errors.model;
@@ -98,6 +150,7 @@ export default function AddCar() {
     }
     return error;
   };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     let validationErrors = {};
@@ -238,15 +291,25 @@ export default function AddCar() {
               )}
             </div>
             <div className="my-4">
-              <input
-                type="text"
-                className="form-control my-1"
-                placeholder="Enter type of Car"
+              <select
+                className="form-select my-1"
+                aria-label="Default select example"
                 name="typeOfCar"
                 value={typeOfCar}
                 onChange={(e) => onInputChange(e)}
                 onBlur={onBlur}
-              />
+                required
+              >
+                <option selected value={""}>
+                  {" "}
+                  Select Type Of Car
+                </option>
+                {typesofCarSort.map((typeOfCar) => (
+                  <option key={typeOfCar} value={typeOfCar}>
+                    {typeOfCar}
+                  </option>
+                ))}
+              </select>
               {errors.typeOfCar && (
                 <div
                   className="position-absolute text-danger"
@@ -258,15 +321,25 @@ export default function AddCar() {
               )}
             </div>
             <div className="my-4">
-              <input
-                type="text"
-                className="form-control my-1"
-                placeholder="Enter Color Of car"
+              <select
+                className="form-select my-1"
+                aria-label="Default select example"
                 name="color"
                 value={color}
                 onChange={(e) => onInputChange(e)}
                 onBlur={onBlur}
-              />
+                required
+              >
+                <option selected value={""}>
+                  {" "}
+                  Select Color Of Car
+                </option>
+                {colorsOfCars.map((colorOfCar) => (
+                  <option key={colorOfCar} value={colorOfCar}>
+                    {colorOfCar}
+                  </option>
+                ))}
+              </select>
               {errors.color && (
                 <div
                   className="position-absolute text-danger"
@@ -300,15 +373,25 @@ export default function AddCar() {
               )}
             </div>
             <div className="my-4">
-              <input
-                type="text"
-                className="form-control my-1"
-                placeholder="Enter Make Of Car"
+              <select
+                className="form-select my-1"
+                aria-label="Default select example"
                 name="make"
                 value={make}
                 onChange={(e) => onInputChange(e)}
                 onBlur={onBlur}
-              />
+                required
+              >
+                <option selected value={""}>
+                  {" "}
+                  Select Make Of Car
+                </option>
+                {makesOfCarSort.map((makeofCar) => (
+                  <option key={makeofCar} value={makeofCar}>
+                    {makeofCar}
+                  </option>
+                ))}
+              </select>
               {errors.make && (
                 <div
                   className="position-absolute text-danger"

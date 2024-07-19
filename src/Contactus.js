@@ -119,7 +119,7 @@ export default function Contactus() {
     const result = await axios.get("http://localhost:8080/allcontactdetails");
     setContactdetails(result.data);
   };
-
+  
   const emptyRows =
     page > 0
       ? Math.max(0, (1 + page) * rowsPerPage - contactdetails.length)
@@ -146,14 +146,14 @@ export default function Contactus() {
       </div>
       <TableContainer
         component={Paper}
-        sx={{ minWidth: 500, maxWidth: 1000, margin: "auto" }}
+        // sx={{ minWidth: 500, maxWidth: 1000, margin: "auto" }}
       >
         <div class="input-group">
           <div class="form-outline" data-mdb-input-init>
             <input
               type="search"
               id="form1"
-              class="form-control m-3"
+              class="form-control my-2 m-1"
               placeholder="Search"
               onChange={(e) => {
                 handleSearchChange(e);
@@ -162,13 +162,22 @@ export default function Contactus() {
           </div>
         </div>
         <Table
-          sx={{ minWidth: 500, maxWidth: 1000 }}
+          sx={{ minWidth: 500}}
           aria-label="custom pagination table"
         >
           <thead style={{ backgroundColor: "#1976d2", height: "50px" }}>
             <tr>
               <th scope="row" style={{ textAlign: "center" }}>
                 Inventory Number
+              </th>
+              <th scope="row" style={{ textAlign: "center" }}>
+                City
+              </th>
+              <th scope="row" style={{ textAlign: "center" }}>
+                Pincode
+              </th>
+              <th scope="row" style={{ textAlign: "center" }}>
+                LandMark
               </th>
               <th scope="row" style={{ textAlign: "center" }}>
                 Email
@@ -209,15 +218,37 @@ export default function Contactus() {
                 >
                   {item[2]}
                 </TableCell>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  style={{ textAlign: "center" }}
+                >
+                  {item[3]}
+                </TableCell>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  style={{ textAlign: "center" }}
+                >
+                  {item[4]}
+                </TableCell>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  style={{ textAlign: "center" }}
+                >
+                  {item[5]}
+                </TableCell>
+                
               </TableRow>
             ))}
-            {emptyRows > 0 && (
+            {emptyRows > 0  && (
               <TableRow style={{ height: 53 * emptyRows }}>
                 <TableCell colSpan={6} />
               </TableRow>
             )}
           </TableBody>
-          <TableFooter>
+          <TableFooter style={{ position: "absolute", right: "25px" }}>
             <TableRow>
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
@@ -236,6 +267,7 @@ export default function Contactus() {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
                 ActionsComponent={TablePaginationActions}
+                labelDisplayedRows={({from,to,count})=>`Page ${page+1} of ${Math.ceil(count/rowsPerPage)}`}
               />
             </TableRow>
           </TableFooter>

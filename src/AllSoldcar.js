@@ -177,12 +177,16 @@ export default function AllSoldcar() {
         <h4 className="mb-5" style={{ color: "#112466", textAlign: "center" }}>
           List of All Sold Cars
         </h4>
-        <div class="input-group">
+       
+      </div>
+
+      <TableContainer component={Paper}>
+      <div class="input-group">
           <div class="form-outline" data-mdb-input-init>
             <input
               type="search"
               id="form1"
-              class="form-control m-3"
+              class="form-control my-2 m-1"
               placeholder="Search"
               onChange={(e) => {
                 handleSearchChange(e);
@@ -190,9 +194,6 @@ export default function AllSoldcar() {
             />
           </div>
         </div>
-      </div>
-
-      <TableContainer component={Paper}>
         <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
           <thead style={{ backgroundColor: "#1976d2", height: "50px" }}>
             <tr>
@@ -320,7 +321,7 @@ export default function AllSoldcar() {
                 </TableCell>
               </TableRow>
             ))}
-            {emptyRows > 0 && (
+            {emptyRows > 0  && (
               <TableRow style={{ height: 53 * emptyRows }}>
                 <TableCell colSpan={6} />
               </TableRow>
@@ -328,6 +329,7 @@ export default function AllSoldcar() {
           </TableBody>
           <TableFooter style={{ position: "absolute", right: "25px" }}>
             <TableRow>
+            {filteredInventoryDetails.length >5 &&(
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={3}
@@ -345,7 +347,9 @@ export default function AllSoldcar() {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
                 ActionsComponent={TablePaginationActions}
+                labelDisplayedRows={({from,to,count})=>`Page ${page+1} of ${Math.ceil(count/rowsPerPage)}`}
               />
+            )}
             </TableRow>
           </TableFooter>
         </Table>
@@ -358,18 +362,6 @@ export default function AllSoldcar() {
             position: "fixed",
             bottom: "20px",
             paddingRight: "250",
-            fontSize: "40px",
-          }}
-        ></i>
-      </Link>
-      <Link to={"/addInventory"}>
-        <i
-          class="bi bi-plus-circle-fill"
-          style={{
-            color: "#1976d2",
-            position: "fixed",
-            bottom: "20px",
-            left: "95%",
             fontSize: "40px",
           }}
         ></i>

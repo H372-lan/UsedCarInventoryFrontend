@@ -18,6 +18,9 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
+import { Button, Chip, Drawer, Grid, Typography } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { FilterList } from "@mui/icons-material";
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -93,6 +96,13 @@ export default function CardetailsInventory() {
   const [alertmessage, setAlertmessage] = useState(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [hoveredRow, setHoveredRow] = useState(null);
+  const [selctedFilters, SetSelectedFilters] = useState({
+    typeOfCar: [],
+    make: [],
+    color: [],
+  });
+  const [activateFilters, setActivateFilters] = useState([]);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
   const handleGoBack = () => {
     navigate(-1);
@@ -102,18 +112,51 @@ export default function CardetailsInventory() {
   const [inventorydetails, setInventorydetails] = useState([]);
   const filteredInventoryDetails = inventorydetails.filter((item) => {
     const searchTerm = search.toLowerCase();
-    return (
+    const matchesSearch =
       (item.typeOfCar && item.typeOfCar.toLowerCase().includes(searchTerm)) ||
       (item.color && item.color.toLowerCase().includes(searchTerm)) ||
       (item.pincode && item.pincode.toLowerCase().includes(searchTerm)) ||
       (item.model && item.model.toLowerCase().includes(searchTerm)) ||
       (item.make && item.make.toLowerCase().includes(searchTerm)) ||
-      (item.saleNo.toString() && item.saleNo.toString().includes(searchTerm))
-    );
+      (item.inventoryNumber.toString() &&
+        item.inventoryNumber.toString().includes(searchTerm)) ||
+      (item.saleNo.toString() && item.saleNo.toString().includes(searchTerm));
+
+    const matchesFilters =
+      (selctedFilters.typeOfCar.length===0
+        ||  selctedFilters.typeOfCar.includes(item.typeOfCar)
+        ) &&
+      (selctedFilters.color.length===0 || selctedFilters.color.includes(item.color)) &&
+      (selctedFilters.make.length===0 || selctedFilters.make.includes(item.make));
+    return matchesSearch && matchesFilters;
   });
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
     setPage(0);
+  };
+  const handleFilterChange = (type, value) => {
+    SetSelectedFilters((prev) => {
+      const newValues=prev[type].includes(value)?prev[type].filter((v)=>v !== value):
+      [...prev[type], value];
+    return{...prev,[type]:newValues} });
+    setActivateFilters((prev) => {
+      const newFilters=prev.some((filter)=>filter.type===type && filter.value===value)?prev.filter((filter)=>!(filter.type===type &&filter.value=== value))
+    :[...prev,{type,value}] ;
+  return newFilters;});
+    setPage(0);
+  };
+  const handleToggleDrawer = (event) => {
+    setDrawerOpen(!drawerOpen);
+  };
+  const handleResetFilters = () => {
+    SetSelectedFilters({ typeOfCar: [], color: [], make: [] });
+    setActivateFilters([]);
+  };
+  const handleRemoveFilters = (type, value) => {
+    SetSelectedFilters((prev) => ({ ...prev, [type]: prev[type].filter((v)=>v !==value), }));
+    setActivateFilters((prev) =>
+      prev.filter((filter) => !(filter.type === type && filter.value === value))
+    );
   };
 
   useEffect(() => {
@@ -128,6 +171,9 @@ export default function CardetailsInventory() {
   };
 
   const deleteCar = async (id) => {
+    const confirmed=window.confirm(`Are you sure you want to delete this city of pincode${id}`);
+    if(confirmed)
+      {
     const response = await axios.delete(
       `http://localhost:8080/delete/car/${id}`
     );
@@ -140,6 +186,7 @@ export default function CardetailsInventory() {
     }
     loadCar();
   };
+}
 
   const emptyRows =
     page > 0
@@ -182,6 +229,9 @@ export default function CardetailsInventory() {
       </>
     );
   }
+  const uniqueTypes = [...new Set(inventorydetails.map((item) => item.typeOfCar))];
+  const uniqueColors = [...new Set(inventorydetails.map((item) => item.color))];
+  const uniqueMakes = [...new Set(inventorydetails.map((item) => item.make))];
 
   return (
     <>
@@ -210,21 +260,123 @@ export default function CardetailsInventory() {
         <h4 className="mb-5" style={{ color: "#112466", textAlign: "center" }}>
           List of Cars in Inventory number {id}
         </h4>
-        <div class="input-group">
+        <Box sx={{ display: "flex", flexWrap: "wrap", marginBottom: 2 }}>
+          {activateFilters.map((filter, index) => (
+            <Chip
+              key={index}
+              label={`${filter.type}:${filter.value}`}
+              onDelete={() => handleRemoveFilters(filter.type, filter.value)}
+              deleteIcon={<CloseIcon />}
+              sx={{ margin: 0.5 }}
+            />
+          ))}
+        </Box>
+        <Drawer anchor="right" open={drawerOpen} onClose={handleToggleDrawer}>
+          <Box sx={{ width: 300, padding: 2, marginTop: 6 }}>
+            <Typography className="my-4" variant="h6">
+              Filter Options
+            </Typography>
+            <Grid container spacing={1}>
+              <Grid item xs={12}>
+                <Typography variant="subtitle1" className="fw-bold mb-3 my-2">
+                  Type
+                </Typography>
+                {uniqueTypes.map((typeOfCar) => (
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      borderRadius: "50px",
+                      margin: 0.5,
+                      borderBlockColor: "#A8A6A6",
+                      color: "#000000",
+                    }}
+                    onClick={() => handleFilterChange("typeOfCar", typeOfCar)}
+                  >
+                    {typeOfCar}
+                  </Button>
+                ))}
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="subtitle1" className="fw-bold mb-3 my-4">
+                  Color
+                </Typography>
+                {uniqueColors.map((color) => (
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      borderRadius: "50px",
+                      margin: 0.5,
+                      borderBlockColor: "#A8A6A6",
+                      color: "#000000",
+                    }}
+                    onClick={() => handleFilterChange("color", color)}
+                  >
+                    {color}
+                  </Button>
+                ))}
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="subtitle1" className="fw-bold mb-3 my-4">
+                  Make
+                </Typography>
+
+                {uniqueMakes.map((make) => (
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      borderRadius: "50px",
+                      margin: 0.5,
+                      borderBlockColor: "#A8A6A6",
+                      color: "#000000",
+                    }}
+                    onClick={() => handleFilterChange("make", make)}
+                  >
+                    {make}
+                  </Button>
+                ))}
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  className="mx-3 my-3"
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleResetFilters}
+                >
+                  {" "}
+                  Reset
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleToggleDrawer}
+                >
+                  {" "}
+                  Close
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </Drawer>
+        </div>
+      <TableContainer component={Paper}>
+      <div class="input-group">
           <div class="form-outline" data-mdb-input-init>
             <input
               type="search"
               id="form1"
-              class="form-control m-3"
+              class="form-control my-2 m-1"
               placeholder="Search"
               onChange={(e) => {
                 handleSearchChange(e);
               }}
             />
           </div>
+          <IconButton className="mx-4" onClick={handleToggleDrawer}>
+            <FilterList color="primary" />
+          </IconButton>
         </div>
-      </div>
-      <TableContainer component={Paper}>
+        
+      
         <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
           <thead style={{ backgroundColor: "#1976d2", height: "50px" }}>
             <tr>
@@ -409,6 +561,7 @@ export default function CardetailsInventory() {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
                 ActionsComponent={TablePaginationActions}
+                labelDisplayedRows={({from,to,count})=>`Page ${page+1} of ${Math.ceil(count/rowsPerPage)}`}
               />
             </TableRow>
           </TableFooter>

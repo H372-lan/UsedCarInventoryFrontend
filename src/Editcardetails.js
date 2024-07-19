@@ -6,6 +6,13 @@ export default function Editcardetails() {
   let navigate = useNavigate();
   const [alertmessage, setAlertmessage] = useState(null);
   const [inventoriesdatanum, setInventoriesdatanum] = useState([]);
+  const makesOfCar=["Tata","Mini","Toyota","Audi","Honda","Maruti","Dodge","Buick","BMW","Ferrari","Ford"
+                  ,"Aston Martin","Bentley","Bugati","Chevrolet","Citroen","Fiat","Abarth","Cadillac",
+                  "Chrysler","Lamborghini","Mahindra&Mahindra","Nissan","Aixam","Alpine","Mercedes-Benz"];
+const makesOfCarSort=makesOfCar.sort();
+const typesOfCar=["Sedan","Minivan","Hatchback","MPV","SUV","Coupe","Convertible","Crossover","SportsCar","PickupTruck"];
+const typesofCarSort=typesOfCar.sort();
+const colorsOfCars=["Black","White","Blue","Violet","Red","Green","Yellow","Silver","Brown","Pink"];
 
   const handleGoBack = () => {
     navigate(-1);
@@ -181,7 +188,7 @@ export default function Editcardetails() {
               <label
                 className="col-sm-2 col-form-label"
                 style={{
-                  textAlign: "right",
+                  textAlign: "left",
                   fontWeight: "bold",
                   color: "#0B5A8A",
                 }}
@@ -223,7 +230,7 @@ export default function Editcardetails() {
               <label
                 className="col-sm-2 col-form-label"
                 style={{
-                  textAlign: "right",
+                  textAlign: "left",
                   fontWeight: "bold",
                   color: "#0B5A8A",
                 }}
@@ -255,7 +262,7 @@ export default function Editcardetails() {
               <label
                 className="col-sm-2 col-form-label"
                 style={{
-                  textAlign: "right",
+                  textAlign: "left",
                   fontWeight: "bold",
                   color: "#0B5A8A",
                 }}
@@ -287,23 +294,36 @@ export default function Editcardetails() {
               <label
                 className="col-sm-2 col-form-label"
                 style={{
-                  textAlign: "right",
+                  textAlign: "left",
                   fontWeight: "bold",
                   color: "#0B5A8A",
                 }}
               >
                 Type
               </label>
-              <div className="col-sm-10">
-                <input
-                  type="text"
-                  className="form-control my-1"
-                  placeholder="Enter Type of Car"
+              <div className="col-sm-9">
+                <select
+                  className="form-select my-1"
+                  aria-label="Default select example"
                   name="typeOfCar"
                   value={typeOfCar}
-                  onChange={(e) => onInputChange(e)}
+                  onChange={(e) => {
+                    onInputChange(e);
+                  }}
+                  required
                   onBlur={onBlur}
-                />
+                >
+                  <option selected value={typesofCarSort.includes(typeOfCar) ? typeOfCar : ""}>
+                    {typesofCarSort.includes(typeOfCar) ? typeOfCar : " Select Type Of Car"}
+                  </option>
+                  {typesofCarSort
+                    .filter((type) => type !== typeOfCar)
+                    .map((type) => (
+                      <option key={type} value={type}>
+                        {type}
+                      </option>
+                    ))}
+                </select>
                 {errors.typeOfCar && (
                   <div
                     className="position-absolute text-danger"
@@ -319,7 +339,7 @@ export default function Editcardetails() {
               <label
                 className="col-sm-2 col-form-label"
                 style={{
-                  textAlign: "right",
+                  textAlign: "left",
                   fontWeight: "bold",
                   color: "#0B5A8A",
                 }}
@@ -327,15 +347,28 @@ export default function Editcardetails() {
                 Color
               </label>
               <div className="col-sm-9">
-                <input
-                  type="text"
-                  className="form-control my-1"
-                  placeholder="Enter color of car"
+                <select
+                  className="form-select my-1"
+                  aria-label="Default select example"
                   name="color"
                   value={color}
-                  onChange={(e) => onInputChange(e)}
+                  onChange={(e) => {
+                    onInputChange(e);
+                  }}
+                  required
                   onBlur={onBlur}
-                />
+                >
+                  <option selected value={colorsOfCars.includes(color) ? color : ""}>
+                    {colorsOfCars.includes(color) ? color : " Select Color Of Car"}
+                  </option>
+                  {colorsOfCars
+                    .filter((colors) => colors !== color)
+                    .map((colors) => (
+                      <option key={colors} value={colors}>
+                        {colors}
+                      </option>
+                    ))}
+                </select>
                 {errors.color && (
                   <div
                     className="position-absolute text-danger"
@@ -351,7 +384,7 @@ export default function Editcardetails() {
               <label
                 className="col-sm-2 col-form-label"
                 style={{
-                  textAlign: "right",
+                  textAlign: "left",
                   fontWeight: "bold",
                   color: "#0B5A8A",
                 }}
@@ -383,7 +416,7 @@ export default function Editcardetails() {
               <label
                 className="col-sm-2 col-form-label"
                 style={{
-                  textAlign: "right",
+                  textAlign: "left",
                   fontWeight: "bold",
                   color: "#0B5A8A",
                 }}
@@ -391,15 +424,28 @@ export default function Editcardetails() {
                 Make
               </label>
               <div className="col-sm-9">
-                <input
-                  type="text"
-                  className="form-control my-1"
-                  placeholder="Enter model"
+                <select
+                  className="form-select my-1"
+                  aria-label="Default select example"
                   name="make"
                   value={make}
-                  onChange={(e) => onInputChange(e)}
+                  onChange={(e) => {
+                    onInputChange(e);
+                  }}
+                  required
                   onBlur={onBlur}
-                />
+                >
+                  <option selected value={makesOfCarSort.includes(make) ? make : ""}>
+                    {makesOfCarSort.includes(make) ? make : " Select Make Of Car"}
+                  </option>
+                  {makesOfCarSort
+                    .filter((maker) => maker !== make)
+                    .map((maker) => (
+                      <option key={maker} value={maker}>
+                        {maker}
+                      </option>
+                    ))}
+                </select>
                 {errors.make && (
                   <div
                     className="position-absolute text-danger"
@@ -415,7 +461,7 @@ export default function Editcardetails() {
               <label
                 className="col-sm-2 col-form-label"
                 style={{
-                  textAlign: "right",
+                  textAlign: "left",
                   fontWeight: "bold",
                   color: "#0B5A8A",
                 }}
@@ -447,7 +493,7 @@ export default function Editcardetails() {
               <label
                 className="col-sm-2 col-form-label"
                 style={{
-                  textAlign: "right",
+                  textAlign: "left",
                   fontWeight: "bold",
                   color: "#0B5A8A",
                 }}

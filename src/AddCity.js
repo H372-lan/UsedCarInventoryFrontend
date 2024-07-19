@@ -25,53 +25,96 @@ export default function AddCity() {
   const onInputChange = (e) => {
     const { name, value } = e.target;
     setCityadd({ ...cityadd, [name]: value });
+    if (name === "pincode" && value.length === 6) {
+      fetchPincodeData(value);
+    } else if (name === "pincode" && value.length < 6) {
+      setCityadd((prev) => ({
+        ...prev,
+        stateName: "",
+        cityName: "",
+        country: "",
+      }));
+    }
   };
   const onBlur = (e) => {
     const { name, value } = e.target;
     const error = validateField(name, value);
-    setErrors({ ...errors, [name]: error });
+    setErrors((prev) => ({ ...prev, [name]: error }));
   };
   const validateField = (name, value) => {
     let error = "";
     if (!value) {
-      error = "This Field is Required";
+      error = "Please Enter Valid Pincode";
     } else {
       if (name === "pincode") {
         if (!/^\d{6}$/.test(value)) {
           error = "Pincode must contain 6 digit";
         }
-
-        delete errors.pincode;
-      } else if (name === "cityName") {
+      } else if (["cityName", "stateName", "country"].includes(name)) {
         if (!/^[a-zA-Z0-9 ]+$/.test(value)) {
-          error = "CityName Can not Contain special Character";
+          error = `${name} Can not Contain special Character`;
         }
-
-        delete errors.cityName;
-      } else if (name === "stateName") {
-        if (!/^[a-zA-Z0-9 ]+$/.test(value)) {
-          error = "StateName Can not Contain special Character";
-        }
-
-        delete errors.stateName;
-      } else if (name === "country") {
-        if (!/^[a-zA-Z0-9 ]+$/.test(value)) {
-          error = "Country Can not Contain special Character";
-        }
-
-        delete errors.country;
       }
     }
     return error;
   };
+  const fetchPincodeData = async (pincode) => {
+    // if(pincode && !errors.pincode)
+    //   {
+    try {
+      const response = await axios.get(
+        `https://api.postalpincode.in/pincode/${pincode}`
+      );
+      if (response.data[0].Status === "Success") {
+        const { State, Country, District } = response.data[0].PostOffice[0];
+        setCityadd((prev) => ({
+          ...prev,
+          stateName: State,
+          country: Country,
+          cityName: District,
+        }));
+        setErrors((prev) => ({
+          ...prev,
+          pincode: "",
+          stateName: "",
+          country: "",
+          cityName: "",
+        }));
+      } else {
+        setCityadd((prev) => ({
+          ...prev,
+          stateName: "",
+          cityName: "",
+          country: "",
+        }));
+        setErrors((prev) => ({
+          ...prev,
+          pincode: "Enter a valid Pincode",
+        }));
+      }
+    } catch (error) {
+      console.error("Error");
+      setCityadd((prev) => ({
+        ...prev,
+        stateName: "",
+        country: "",
+        cityName: "",
+      }));
+      setErrors((prev) => ({
+        ...prev,
+        pincode: "Error Fetching Pincode Data",
+      }));
+    }
+  };
 
+  // }
   const onSubmit = async (e) => {
     e.preventDefault();
     let validationErrors = {};
     Object.keys(cityadd).forEach((key) => {
       const error = validateField(key, cityadd[key]);
       if (error) {
-        validationErrors[key] = "This fiels is required";
+        validationErrors[key] = "This is Required";
       }
     });
     setErrors(validationErrors);
@@ -190,6 +233,8 @@ export default function AddCity() {
                 value={country}
                 onChange={(e) => onInputChange(e)}
                 onBlur={onBlur}
+                style={{ backgroundColor: "#ECE8E8" }}
+                readOnly
               />
               {errors.country && (
                 <div
@@ -210,6 +255,8 @@ export default function AddCity() {
                 value={stateName}
                 onChange={(e) => onInputChange(e)}
                 onBlur={onBlur}
+                style={{ backgroundColor: "#ECE8E8" }}
+                readOnly
               />
               {errors.stateName && (
                 <div
@@ -229,7 +276,9 @@ export default function AddCity() {
                 name="cityName"
                 value={cityName}
                 onChange={(e) => onInputChange(e)}
+                style={{ backgroundColor: "#ECE8E8" }}
                 onBlur={onBlur}
+                readOnly
               />
               {errors.cityName && (
                 <div

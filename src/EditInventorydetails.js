@@ -259,7 +259,7 @@ export default function EditInventorydetails() {
               <label
                 className="col-sm-2 col-form-label"
                 style={{
-                  textAlign: "right",
+                  textAlign: "left",
                   fontWeight: "bold",
                   color: "#0B5A8A",
                 }}
@@ -312,7 +312,7 @@ export default function EditInventorydetails() {
               <label
                 className="col-sm-2 col-form-label"
                 style={{
-                  textAlign: "right",
+                  textAlign: "left",
                   fontWeight: "bold",
                   color: "#0B5A8A",
                 }}
@@ -355,7 +355,7 @@ export default function EditInventorydetails() {
               <label
                 className="col-sm-2 col-form-label"
                 style={{
-                  textAlign: "right",
+                  textAlign: "left",
                   fontWeight: "bold",
                   color: "#0B5A8A",
                 }}
@@ -398,7 +398,7 @@ export default function EditInventorydetails() {
               <label
                 className="col-sm-2 col-form-label"
                 style={{
-                  textAlign: "right",
+                  textAlign: "left",
                   fontWeight: "bold",
                   color: "#0B5A8A",
                 }}
@@ -444,7 +444,7 @@ export default function EditInventorydetails() {
               <label
                 className="col-sm-2 col-form-label"
                 style={{
-                  textAlign: "right",
+                  textAlign: "left",
                   fontWeight: "bold",
                   color: "#0B5A8A",
                 }}
@@ -477,7 +477,7 @@ export default function EditInventorydetails() {
               <label
                 className="col-sm-2 col-form-label"
                 style={{
-                  textAlign: "right",
+                  textAlign: "left",
                   fontWeight: "bold",
                   color: "#0B5A8A",
                 }}
@@ -512,7 +512,7 @@ export default function EditInventorydetails() {
               <label
                 className="col-sm-2 col-form-label"
                 style={{
-                  textAlign: "right",
+                  textAlign: "left",
                   fontWeight: "bold",
                   color: "#0B5A8A",
                 }}

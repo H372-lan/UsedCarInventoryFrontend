@@ -173,6 +173,8 @@ export default function AllCars() {
   };
 
   const deleteCar = async (id) => {
+    const confirmed=window.confirm(`Are you sure you want to delete this car of saleno${id}`);
+    if(confirmed){
     await axios.delete(`http://localhost:8080/delete/car/${id}`);
     setAlertmessage({ type: "success", text: "Deleted Successfully" });
     setTimeout(() => {
@@ -180,6 +182,7 @@ export default function AllCars() {
     }, 1000);
     loadCars();
   };
+}
   const handleMouseEnter = (index) => {
     setHoveredRow(index);
   };
@@ -342,7 +345,7 @@ export default function AllCars() {
             <input
               type="search"
               id="form1"
-              class="form-control m-3"
+              class="form-control mb-2 m-1"
               placeholder="Search"
               onChange={(e) => {
                 handleSearchChange(e);
@@ -520,6 +523,7 @@ export default function AllCars() {
           </TableBody>
           <TableFooter style={{ position: "absolute", right: "25px" }}>
             <TableRow>
+              {filteredCarDetails.length>5 &&(
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={3}
@@ -537,7 +541,9 @@ export default function AllCars() {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
                 ActionsComponent={TablePaginationActions}
+                labelDisplayedRows={({from,to,count})=>`Page ${page+1} of ${Math.ceil(count/rowsPerPage)}`}
               />
+              )}
             </TableRow>
           </TableFooter>
         </Table>
